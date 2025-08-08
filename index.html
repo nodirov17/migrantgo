@@ -49,13 +49,13 @@
             background-clip: text;
         }
 
-        .nav-links {
+        .nav-center {
             display: flex;
             list-style: none;
             gap: 2rem;
         }
 
-        .nav-links a {
+        .nav-center a {
             text-decoration: none;
             color: #333;
             font-weight: 500;
@@ -63,11 +63,11 @@
             position: relative;
         }
 
-        .nav-links a:hover {
+        .nav-center a:hover {
             color: #2196F3;
         }
 
-        .nav-links a::after {
+        .nav-center a::after {
             content: '';
             position: absolute;
             width: 0;
@@ -78,8 +78,50 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover::after {
+        .nav-center a:hover::after {
             width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196F3, #4CAF50);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .login-btn:hover::before {
+            left: 0;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
         }
 
         .mobile-menu {
@@ -332,6 +374,7 @@
             text-align: center;
             transition: all 0.3s ease;
             border: 3px solid transparent;
+            cursor: pointer;
         }
 
         .country-card:hover {
@@ -562,9 +605,48 @@
             color: #333;
         }
 
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 5%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            text-align: center;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-nav ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 1rem;
+            display: block;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav ul li a:hover {
+            background: #f0f0f0;
+            color: #2196F3;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-links {
+            .nav-center {
                 display: none;
             }
 
@@ -597,6 +679,11 @@
             .nav {
                 padding: 1rem 3%;
             }
+
+            .login-btn {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
         }
 
         /* Animations */
@@ -625,6 +712,28 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            z-index: 1001;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body>
@@ -632,18 +741,36 @@
     <header class="header">
         <nav class="nav">
             <div class="logo">MigrantGo</div>
-            <ul class="nav-links">
+            <ul class="nav-center">
                 <li><a href="#home">Bosh sahifa</a></li>
                 <li><a href="#features">Imkoniyatlar</a></li>
                 <li><a href="#countries">Davlatlar</a></li>
                 <li><a href="#services">Xizmatlar</a></li>
                 <li><a href="#contact">Aloqa</a></li>
             </ul>
-            <button class="mobile-menu" onclick="toggleMobileMenu()">
-                <i class="fas fa-bars"></i>
-            </button>
+            <div class="nav-right">
+                <a href="login.html" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Kirish
+                </a>
+                <button class="mobile-menu" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </nav>
     </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#home" onclick="toggleMobileMenu()">Bosh sahifa</a></li>
+            <li><a href="#features" onclick="toggleMobileMenu()">Imkoniyatlar</a></li>
+            <li><a href="#countries" onclick="toggleMobileMenu()">Davlatlar</a></li>
+            <li><a href="#services" onclick="toggleMobileMenu()">Xizmatlar</a></li>
+            <li><a href="#contact" onclick="toggleMobileMenu()">Aloqa</a></li>
+            <li><a href="login.html" onclick="toggleMobileMenu()">Kirish</a></li>
+        </ul>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -651,7 +778,7 @@
             <h1>Qonuniy ish topish endi oson!</h1>
             <p>Chet elda xavfsiz va ishonchli ish o'rinlarini toping. Huquqiy himoya va professional yordam bilan.</p>
             <div class="cta-buttons">
-                <a href="#" class="btn btn-primary" onclick="openModal('register')">
+                <a href="register.html" class="btn btn-primary">
                     <i class="fas fa-user-plus"></i>
                     Ro'yxatdan o'tish
                 </a>
@@ -1028,6 +1155,12 @@
         </div>
     </div>
 
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText"></span>
+    </div>
+
     <script>
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1146,6 +1279,27 @@
             }
         });
 
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            if (type === 'error') {
+                notification.style.background = 'linear-gradient(45deg, #f44336, #d32f2f)';
+                notification.querySelector('i').className = 'fas fa-exclamation-circle';
+            } else {
+                notification.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                notification.querySelector('i').className = 'fas fa-check-circle';
+            }
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
         // Form submissions
         function submitForm(event) {
             event.preventDefault();
@@ -1157,7 +1311,7 @@
             
             // Simulate form submission
             setTimeout(() => {
-                alert('Murojaatingiz muvaffaqiyatli yuborildi! Tez orada siz bilan bog\'lanamiz.');
+                showNotification('Murojaatingiz muvaffaqiyatli yuborildi! Tez orada siz bilan bog\'lanamiz.');
                 button.innerHTML = originalText;
                 button.disabled = false;
                 event.target.reset();
@@ -1174,7 +1328,7 @@
             
             // Simulate registration
             setTimeout(() => {
-                alert('Ro\'yxatdan o\'tish muvaffaqiyatli yakunlandi! Email manzilingizga tasdiqlash xabari yuborildi.');
+                showNotification('Ro\'yxatdan o\'tish muvaffaqiyatli yakunlandi! Email manzilingizga tasdiqlash xabari yuborildi.');
                 button.innerHTML = originalText;
                 button.disabled = false;
                 closeModal('register');
@@ -1214,6 +1368,36 @@
                         { title: 'Qurilish ishchisi', salary: '180,000-280,000 tenge', company: 'Build Kazakhstan' },
                         { title: 'Omborchi', salary: '120,000-200,000 tenge', company: 'Logistics KZ' }
                     ]
+                },
+                turkey: {
+                    name: 'Turkiya',
+                    flag: '🇹🇷',
+                    jobs: [
+                        { title: 'Tekstil ishchisi', salary: '3,500-5,000 lira', company: 'Textile Turkey' },
+                        { title: 'Turizm xodimi', salary: '4,000-6,000 lira', company: 'Hotel Chain' },
+                        { title: 'Qurilish ishchisi', salary: '4,500-6,500 lira', company: 'Construction TR' },
+                        { title: 'Oshpaz', salary: '3,800-5,500 lira', company: 'Restaurant TR' }
+                    ]
+                },
+                poland: {
+                    name: 'Polsha',
+                    flag: '🇵🇱',
+                    jobs: [
+                        { title: 'Zavod ishchisi', salary: '3,000-4,200 zloty', company: 'Manufacturing PL' },
+                        { title: 'Omborchi', salary: '2,800-3,800 zloty', company: 'Logistics PL' },
+                        { title: 'Fermachi', salary: '2,500-3,500 zloty', company: 'Agriculture PL' },
+                        { title: 'Haydovchi', salary: '3,200-4,500 zloty', company: 'Transport PL' }
+                    ]
+                },
+                germany: {
+                    name: 'Germaniya',
+                    flag: '🇩🇪',
+                    jobs: [
+                        { title: 'Hamshira yordamchisi', salary: '2,200-2,800 euro', company: 'Healthcare DE' },
+                        { title: 'Tozalash xodimi', salary: '1,800-2,300 euro', company: 'Cleaning DE' },
+                        { title: 'Fermachi', salary: '1,900-2,500 euro', company: 'Agriculture DE' },
+                        { title: 'Omborchi', salary: '2,000-2,600 euro', company: 'Logistics DE' }
+                    ]
                 }
             };
 
@@ -1241,15 +1425,26 @@
         }
 
         function applyForJob(jobTitle, country) {
-            alert(`"${jobTitle}" lavozimi uchun ${country}da ariza berishni xohlaysiz. Ro'yxatdan o'ting va to'liq ma'lumot bering.`);
+            showNotification(`"${jobTitle}" lavozimi uchun ${country}da ariza berish uchun ro'yxatdan o'ting.`);
             closeModal('job');
-            openModal('register');
+            // Redirect to register page
+            setTimeout(() => {
+                window.location.href = 'register.html';
+            }, 2000);
         }
 
         // Mobile menu toggle
         function toggleMobileMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            const mobileNav = document.getElementById('mobileNav');
+            const menuIcon = document.querySelector('.mobile-menu i');
+            
+            if (mobileNav.style.display === 'block') {
+                mobileNav.style.display = 'none';
+                menuIcon.className = 'fas fa-bars';
+            } else {
+                mobileNav.style.display = 'block';
+                menuIcon.className = 'fas fa-times';
+            }
         }
 
         // Typing effect for hero title
@@ -1329,7 +1524,18 @@
                 el.style.animationDelay = (index * 0.1) + 's';
             });
         });
+
+        // Close mobile menu when clicking on a link
+        document.addEventListener('click', function(e) {
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const menuIcon = document.querySelector('.mobile-menu i');
+            
+            if (!mobileNav.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileNav.style.display = 'none';
+                menuIcon.className = 'fas fa-bars';
+            }
+        });
     </script>
 </body>
 </html>
-                        
