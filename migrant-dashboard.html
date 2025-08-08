@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MigrantGo - Migrant Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-top {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .header-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .header-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-main {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .notifications {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .user-info h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .user-info p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 1rem 0;
+            min-width: 200px;
+            display: none;
+            z-index: 1001;
+            color: #333;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        /* Sidebar */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 120px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .sidebar-menu li {
+            margin: 0.25rem 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(90deg, rgba(33, 150, 243, 0.1), transparent);
+            color: #2196F3;
+            border-left-color: #2196F3;
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: #f8f9fa;
+        }
+
+        .content-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #2196F3);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        /* Job Cards */
+        .jobs-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 0.5rem;
+        }
+
+        .filter-tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .filter-tab.active {
+            background: #2196F3;
+            color: white;
+        }
+
+        .jobs-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .job-card {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .job-card:hover {
+            border-color: #2196F3;
+            box-shadow: 0 5px 20px rgba(33, 150, 243, 0.1);
+            transform: translateX(5px);
+        }
+
+        .job-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .job-info {
+            flex: 1;
+        }
+
+        .job-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-company {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .job-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .job-salary {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #4CAF50;
+        }
+
+        .job-type {
+            padding: 0.3rem 0.8rem;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .job-date {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            color: #2196F3;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                transition: left 0.3s ease;
+                z-index: 1000;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-main {
+                padding: 1rem;
+            }
+
+            .header-info {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .job-card {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .job-meta {
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .filter-tabs {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+
+        /* Profile Completion Alert */
+        .completion-alert {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .completion-alert .close-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .completion-alert .close-btn:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-top">
+            <div class="header-info">
+                <span><i class="fas fa-phone"></i> +998 90 123 45 67</span>
+                <span><i class="fas fa-envelope"></i> support@migrantgo.uz</span>
+                <span><i class="fas fa-clock"></i> 24/7 Qo'llab-quvvatlash</span>
+            </div>
+            <div class="header-actions">
+                <span><i class="fas fa-shield-alt"></i> Xavfsiz platforma</span>
+            </div>
+        </div>
+        
+        <div class="header-main">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()" style="display: none;">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a href="index.html" class="logo">MigrantGo</a>
+            </div>
+            
+            <div class="user-profile">
+                <div class="notifications" onclick="toggleNotifications()">
+                    <i class="fas fa-bell" style="font-size: 1.3rem;"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                
+                <div class="user-info">
+                    <h3>Aziz Karimov</h3>
+                    <p>Migrant</p>
+                </div>
+                
+                <div class="dropdown-menu" id="userDropdown">
+                    <a href="#" class="dropdown-item" onclick="showPage('profile')">
+                        <i class="fas fa-user"></i>
+                        Profil
+                    </a>
+                    <a href="#" class="dropdown-item" onclick="showPage('settings')">
+                        <i class="fas fa-cog"></i>
+                        Sozlamalar
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-question-circle"></i>
+                        Yordam
+                    </a>
+                    <a href="login.html" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Chiqish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="showPage('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Bosh panel</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('jobs')">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Ish o'rinlari</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('applications')">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Mening arizalarim</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('profile')">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Shaxsiy ma'lumotlar</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('documents')">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Hujjatlar</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('interviews')">
+                    <i class="fas fa-video"></i>
+                    <span>Suhbatlar</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('courses')">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Kurslar</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('legal')">
+                    <i class="fas fa-gavel"></i>
+                    <span>Huquqiy yordam</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('messages')">
+                    <i class="fas fa-comments"></i>
+                    <span>Xabarlar</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('analytics')">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistika</span>
+                </a></li>
+                <li><a href="#" onclick="showPage('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>Sozlamalar</span>
+                </a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page-content">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Bosh panel</h1>
+                    <p class="page-subtitle">Xush kelibsiz, Aziz! Bu yerda sizning faoliyatingiz haqida umumiy ma'lumot.</p>
+                </div>
+
+                <!-- Profile Completion Alert -->
+                <div class="completion-alert fade-in">
+                    <i class="fas fa-info-circle" style="font-size: 1.5rem;"></i>
+                    <div>
+                        <strong>Profilingizni to'ldiring!</strong><br>
+                        Profilingiz 75% to'ldirilgan. Qolgan ma'lumotlarni kiritish ish topish imkoniyatingizni oshiradi.
+                    </div>
+                    <button class="close-btn" onclick="this.parentElement.style.display='none'">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Dashboard Cards -->
+                <div class="dashboard-grid">
+                    <div class="dashboard-card fade-in">
+                        <div class="card-header">
+                            <h3 class="card-title">Profil holati</h3>
+                            <div class="card-icon" style="background: linear-gradient(45deg, #4CAF50, #66BB6A);">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
+                        <div class="card-stats">
+                            <div>
+                                <div class="stat-number">75%</div>
+                                <div class="stat-label">To'ldirilgan</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="showPage('profile')">
+                                To'ldirish
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card fade-in">
+                        <div class="card-header">
+                            <h3 class="card-title">Yangi ish o'rinlari</h3>
+                            <div class="card-icon" style="background: linear-gradient(45deg, #2196F3, #42A5F5);">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                        </div>
+                        <div class="card-stats">
+                            <div>
+                                <div class="stat-number">42</div>
+                                <div class="stat-label">Yangi e'lonlar</div>
+                            </div>
+                            <div>
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Sizga mos</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card fade-in">
+                        <div class="card-header">
+                            <h3 class="card-title">Mening arizalarim</h3>
+                            <div class="card-icon" style="background: linear-gradient(45deg, #FF9800, #FFB74D);">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="card-stats">
+                            <div>
+                                <div class="stat-number">8</div>
+                                <div class="stat-label">Jami arizalar</div>
+                            </div>
+                            <div>
+                                <div class="stat-number">3</div>
+                                <div class="stat-label">Ko'rilmoqda</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card fade-in">
+                        <div class="card-header">
+                            <h3 class="card-title">Suhbatlar</h3>
+                            <div class="card-icon" style="background: linear-gradient(45deg, #9C27B0, #BA68C8);">
+                                <i class="fas fa-video"></i>
+                            </div>
+                        </div>
+                        <div class="card-stats">
+                            <div>
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">Rejalashtirilgan</div>
+                            </div>
+                            <div>
+                                <div class="stat-number">1</div>
+                                <div class="stat-label">Bugun</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions fade-in">
+                    <a href="#" class="quick-action" onclick="showPage('jobs')">
+                        <div class="action-icon" style="background: linear-gradient(45deg, #2196F3, #42A5F5);">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div>
+                            <strong>Ish qidirish</strong><br>
+                            <small>Yangi ish o'rinlarini ko'rish</small>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="quick-action" onclick="showPage('profile')">
+                        <div class="action-icon" style="background: linear-gradient(45deg, #4CAF50, #66BB6A);">
+                            <i class="fas fa-user-edit"></i>
+                        </div>
+                        <div>
+                            <strong>Profil yangilash</strong><br>
+                            <small>Ma'lumotlarni yangilash</small>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="quick-action" onclick="showPage('documents')">
+                        <div class="action-icon" style="background: linear-gradient(45deg, #FF9800, #FFB74D);">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div>
+                            <strong>Hujjat yuklash</strong><br>
+                            <small>CV va sertifikatlar</small>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="quick-action" onclick="showPage('legal')">
+                        <div class="action-icon" style="background: linear-gradient(45deg, #9C27B0, #BA68C8);">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div>
+                            <strong>Huquqiy maslahat</strong><br>
+                            <small>Bepul konsultatsiya</small>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Recent Jobs Section -->
+                <div class="jobs-section fade-in">
+                <!-- Recent Jobs Section -->
+                <div class="jobs-section fade-in">
+                    <div class="section-header">
+                        <h2 class="section-title">Sizga mos ish o'rinlari</h2>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" onclick="filterJobs('recommended')">Tavsiya etilgan</button>
+                            <button class="filter-tab" onclick="filterJobs('recent')">Yangi</button>
+                            <button class="filter-tab" onclick="filterJobs('saved')">Saqlangan</button>
+                        </div>
+                    </div>
+
+                    <div class="jobs-grid" id="jobsGrid">
+                        <div class="job-card" onclick="openJobModal('job1')">
+                            <div class="job-logo">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="job-info">
+                                <div class="job-title">Qurilish ishchisi</div>
+                                <div class="job-company">StroyMaster LLC</div>
+                                <div class="job-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Moskva, Rossiya
+                                </div>
+                            </div>
+                            <div class="job-meta">
+                                <div class="job-salary">$1,200-1,500</div>
+                                <div class="job-type">To'liq vaqt</div>
+                                <div class="job-date">2 kun oldin</div>
+                            </div>
+                        </div>
+
+                        <div class="job-card" onclick="openJobModal('job2')">
+                            <div class="job-logo">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="job-info">
+                                <div class="job-title">Oshpaz</div>
+                                <div class="job-company">Taste Restaurant</div>
+                                <div class="job-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Seul, Janubiy Koreya
+                                </div>
+                            </div>
+                            <div class="job-meta">
+                                <div class="job-salary">₩2,800,000</div>
+                                <div class="job-type">To'liq vaqt</div>
+                                <div class="job-date">1 hafta oldin</div>
+                            </div>
+                        </div>
+
+                        <div class="job-card" onclick="openJobModal('job3')">
+                            <div class="job-logo">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div class="job-info">
+                                <div class="job-title">Haydovchi</div>
+                                <div class="job-company">Logistics Pro</div>
+                                <div class="job-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Almaty, Qozog'iston
+                                </div>
+                            </div>
+                            <div class="job-meta">
+                                <div class="job-salary">₸280,000</div>
+                                <div class="job-type">To'liq vaqt</div>
+                                <div class="job-date">3 kun oldin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jobs Page -->
+            <div id="jobs-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Ish o'rinlari</h1>
+                    <p class="page-subtitle">Sizga mos keladigan ish o'rinlarini toping</p>
+                </div>
+
+                <!-- Job Filters -->
+                <div class="jobs-section fade-in">
+                    <div class="section-header">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" onclick="filterJobsPage('all')">Barchasi</button>
+                            <button class="filter-tab" onclick="filterJobsPage('construction')">Qurilish</button>
+                            <button class="filter-tab" onclick="filterJobsPage('hospitality')">Restoran</button>
+                            <button class="filter-tab" onclick="filterJobsPage('logistics')">Logistika</button>
+                            <button class="filter-tab" onclick="filterJobsPage('manufacturing')">Zavod</button>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <select style="padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd;">
+                                <option>Barcha davlatlar</option>
+                                <option>Rossiya</option>
+                                <option>Janubiy Koreya</option>
+                                <option>Qozog'iston</option>
+                                <option>Turkiya</option>
+                            </select>
+                            <input type="text" placeholder="Ish qidirish..." style="padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd; min-width: 200px;">
+                        </div>
+                    </div>
+
+                    <div class="jobs-grid">
+                        <!-- More job cards would go here -->
+                        <div class="job-card">
+                            <div class="job-logo"><i class="fas fa-hammer"></i></div>
+                            <div class="job-info">
+                                <div class="job-title">Elektr montajchisi</div>
+                                <div class="job-company">ElectroMaster</div>
+                                <div class="job-location"><i class="fas fa-map-marker-alt"></i> Istanbul, Turkiya</div>
+                            </div>
+                            <div class="job-meta">
+                                <div class="job-salary">₺15,000</div>
+                                <div class="job-type">To'liq vaqt</div>
+                                <div class="job-date">5 kun oldin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applications Page -->
+            <div id="applications-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Mening arizalarim</h1>
+                    <p class="page-subtitle">Yuborgan arizalaringizni kuzatib boring</p>
+                </div>
+
+                <div class="jobs-section fade-in">
+                    <div class="applications-list">
+                        <div class="job-card">
+                            <div class="job-logo"><i class="fas fa-building"></i></div>
+                            <div class="job-info">
+                                <div class="job-title">Qurilish ishchisi</div>
+                                <div class="job-company">StroyMaster LLC</div>
+                                <div class="job-location"><i class="fas fa-calendar"></i> 15.12.2024 da yuborilgan</div>
+                            </div>
+                            <div class="job-meta">
+                                <div class="job-type" style="background: #fff3cd; color: #856404;">Ko'rilmoqda</div>
+                                <div class="job-date">3 kun oldin</div>
+                            </div>
+                        </div>
+
+                        <div class="job-card">
+                            <div class="job-logo"><i class="fas fa-utensils"></i></div>
+                            <div class="job-info">
+                                <div class="job-title">Oshpaz</div>
+                                <div class="job-company">Taste Restaurant</div>
+                                <div class="job-location"><i class="fas fa-calendar"></i> 10.12.2024 da yuborilgan</div>
+                            </div>
+                            <div class="job-meta">
+                                <div class="job-type" style="background: #d1ecf1; color: #0c5460;">Suhbat tayinlandi</div>
+                                <div class="job-date">1 hafta oldin</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div id="profile-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Shaxsiy ma'lumotlar</h1>
+                    <p class="page-subtitle">Profilingizni yangilang va to'ldiring</p>
+                </div>
+
+                <div class="jobs-section fade-in">
+                    <form class="profile-form">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Ism</label>
+                                <input type="text" value="Aziz" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #ddd;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Familiya</label>
+                                <input type="text" value="Karimov" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #ddd;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
+                                <input type="email" value="aziz.karimov@gmail.com" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #ddd;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Telefon</label>
+                                <input type="tel" value="+998 90 123 45 67" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #ddd;">
+                            </div>
+                        </div>
+                        <button type="submit" style="background: linear-gradient(45deg, #4CAF50, #2196F3); color: white; padding: 1rem 2rem; border: none; border-radius: 8px; margin-top: 2rem; cursor: pointer;">
+                            Saqlash
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Documents Page -->
+            <div id="documents-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Hujjatlar</h1>
+                    <p class="page-subtitle">CV va sertifikatlaringizni yuklang</p>
+                </div>
+
+                <div class="jobs-section fade-in">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div style="border: 2px dashed #ddd; border-radius: 12px; padding: 2rem; text-align: center;">
+                            <i class="fas fa-file-upload" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                            <h3>CV yuklash</h3>
+                            <p style="color: #666; margin: 1rem 0;">PDF, DOC, DOCX formatida</p>
+                            <button style="background: #2196F3; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; cursor: pointer;">
+                                Fayl tanlash
+                            </button>
+                        </div>
+                        
+                        <div style="border: 2px dashed #ddd; border-radius: 12px; padding: 2rem; text-align: center;">
+                            <i class="fas fa-certificate" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                            <h3>Sertifikatlar</h3>
+                            <p style="color: #666; margin: 1rem 0;">Ta'lim va malaka sertifikatlari</p>
+                            <button style="background: #4CAF50; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; cursor: pointer;">
+                                Fayl tanlash
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">Yuklangan hujjatlar</h3>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <i class="fas fa-file-pdf" style="color: #dc3545; font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong>Aziz_Karimov_CV.pdf</strong>
+                                    <div style="color: #666; font-size: 0.9rem;">Yuklangan: 10.12.2024</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button style="background: none; border: 1px solid #2196F3; color: #2196F3; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                                    Ko'rish
+                                </button>
+                                <button style="background: none; border: 1px solid #dc3545; color: #dc3545; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                                    O'chirish
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interviews Page -->
+            <div id="interviews-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Suhbatlar</h1>
+                    <p class="page-subtitle">Rejalashtirilgan suhbatlaringiz</p>
+                </div>
+
+                <div class="jobs-section fade-in">
+                    <div class="interview-card" style="border-left: 4px solid #4CAF50; background: #f8fff8; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <h3 style="color: #4CAF50; margin-bottom: 0.5rem;">Oshpaz - Taste Restaurant</h3>
+                                <p style="margin-bottom: 0.5rem;"><i class="fas fa-calendar"></i> 20.12.2024, 14:00</p>
+                                <p style="margin-bottom: 0.5rem;"><i class="fas fa-video"></i> Online suhbat (Zoom)</p>
+                                <p><i class="fas fa-user"></i> HR menejeri: Kim Min-jun</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <button style="background: #4CAF50; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem; display: block;">
+                                    Kirish
+                                </button>
+                                <button style="background: none; border: 1px solid #4CAF50; color: #4CAF50; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                                    Batafsil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="interview-card" style="border-left: 4px solid #2196F3; background: #f8fbff; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <div>
+                                <h3 style="color: #2196F3; margin-bottom: 0.5rem;">Qurilish ishchisi - StroyMaster LLC</h3>
+                                <p style="margin-bottom: 0.5rem;"><i class="fas fa-calendar"></i> 22.12.2024, 10:00</p>
+                                <p style="margin-bottom: 0.5rem;"><i class="fas fa-map-marker-alt"></i> Ofis: Moskva, ul. Lenina 25</p>
+                                <p><i class="fas fa-user"></i> Menejer: Petrov Aleksandr</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="background: #2196F3; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                                    Rejalashtirilgan
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other pages content would go here... -->
+            <div id="courses-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Kurslar</h1>
+                    <p class="page-subtitle">Malakangizni oshiring</p>
+                </div>
+                <!-- Course content -->
+            </div>
+
+            <div id="legal-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Huquqiy yordam</h1>
+                    <p class="page-subtitle">Bepul maslahat oling</p>
+                </div>
+                <!-- Legal content -->
+            </div>
+
+            <div id="messages-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Xabarlar</h1>
+                    <p class="page-subtitle">Ish beruvchilar bilan muloqot</p>
+                </div>
+                <!-- Messages content -->
+            </div>
+
+            <div id="analytics-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Statistika</h1>
+                    <p class="page-subtitle">Faoliyat hisoboti</p>
+                </div>
+                <!-- Analytics content -->
+            </div>
+
+            <div id="settings-page" class="page-content" style="display: none;">
+                <div class="content-header fade-in">
+                    <h1 class="page-title">Sozlamalar</h1>
+                    <p class="page-subtitle">Hisobingizni boshqaring</p>
+                </div>
+                <!-- Settings content -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Job Modal -->
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeJobModal()">&times;</span>
+            <div id="jobModalContent">
+                <!-- Job details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Current page tracking
+        let currentPage = 'dashboard';
+
+        // Show specific page
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(pageName + '-page');
+            if (targetPage) {
+                targetPage.style.display = 'block';
+                currentPage = pageName;
+            }
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[onclick="showPage('${pageName}')"]`).classList.add('active');
+            
+            // Update page title
+            updatePageTitle(pageName);
+            
+            // Hide sidebar on mobile
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.remove('show');
+            }
+        }
+
+        // Update page title
+        function updatePageTitle(pageName) {
+            const titles = {
+                'dashboard': 'Bosh panel',
+                'jobs': 'Ish o\'rinlari',
+                'applications': 'Mening arizalarim',
+                'profile': 'Shaxsiy ma\'lumotlar',
+                'documents': 'Hujjatlar',
+                'interviews': 'Suhbatlar',
+                'courses': 'Kurslar',
+                'legal': 'Huquqiy yordam',
+                'messages': 'Xabarlar',
+                'analytics': 'Statistika',
+                'settings': 'Sozlamalar'
+            };
+            document.title = `MigrantGo - ${titles[pageName] || 'Dashboard'}`;
+        }
+
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
+        }
+
+        // Toggle notifications dropdown
+        function toggleNotifications() {
+            // Implementation for notifications
+            console.log('Toggle notifications');
+        }
+
+        // Toggle user dropdown
+        document.querySelector('.user-profile').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('userDropdown').classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.getElementById('userDropdown').classList.remove('show');
+        });
+
+        // Filter jobs on dashboard
+        function filterJobs(type) {
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Here you would filter the jobs based on type
+            console.log('Filter jobs by:', type);
+        }
+
+        // Filter jobs on jobs page
+        function filterJobsPage(category) {
+            document.querySelectorAll('#jobs-page .filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log('Filter jobs by category:', category);
+        }
+
+        // Open job modal
+        function openJobModal(jobId) {
+            const jobDetails = {
+                job1: {
+                    title: 'Qurilish ishchisi',
+                    company: 'StroyMaster LLC',
+                    location: 'Moskva, Rossiya',
+                    salary: '$1,200-1,500',
+                    type: 'To\'liq vaqt',
+                    description: 'Biz tajribali qurilish ishchilarini qidiramiz. Ish joylari: bino qurilishi, ta\'mirlash ishlari, qurilish materialları bilan ishlash.',
+                    requirements: ['Kamida 2 yil tajriba', 'Fizik salomatlik', 'Rus tili bilish', 'Qurilish vositalarini bilish'],
+                    benefits: ['Yashash joyi ta\'minlanadi', 'Tibbiy sug\'urta', 'Transport xarajatlari qoplanadi', 'Overtime to\'lovi']
+                }
+            };
+
+            const job = jobDetails[jobId];
+            if (job) {
+                document.getElementById('jobModalContent').innerHTML = `
+                    <h2>${job.title}</h2>
+                    <div style="display: flex; gap: 2rem; margin: 1rem 0;">
+                        <div><i class="fas fa-building"></i> ${job.company}</div>
+                        <div><i class="fas fa-map-marker-alt"></i> ${job.location}</div>
+                        <div><i class="fas fa-money-bill-wave"></i> ${job.salary}</div>
+                    </div>
+                    
+                    <h3 style="margin-top: 2rem;">Ish haqida</h3>
+                    <p style="margin: 1rem 0; line-height: 1.6;">${job.description}</p>
+                    
+                    <h3>Talablar</h3>
+                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                        ${job.requirements.map(req => `<li>${req}</li>`).join('')}
+                    </ul>
+                    
+                    <h3>Imtiyozlar</h3>
+                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                        ${job.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
+                    </ul>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button onclick="applyForJob('${jobId}')" style="background: linear-gradient(45deg, #4CAF50, #2196F3); color: white; padding: 1rem 2rem; border: none; border-radius: 8px; cursor: pointer; flex: 1;">
+                            <i class="fas fa-paper-plane"></i> Ariza berish
+                        </button>
+                        <button onclick="saveJob('${jobId}')" style="background: none; border: 2px solid #2196F3; color: #2196F3; padding: 1rem 2rem; border-radius: 8px; cursor: pointer;">
+                            <i class="fas fa-heart"></i> Saqlash
+                        </button>
+                    </div>
+                `;
+                document.getElementById('jobModal').style.display = 'block';
+            }
+        }
+
+        // Close job modal
+        function closeJobModal() {
+            document.getElementById('jobModal').style.display = 'none';
+        }
+
+        // Apply for job
+        function applyForJob(jobId) {
+            alert('Ariza muvaffaqiyatli yuborildi!');
+            closeJobModal();
+        }
+
+        // Save job
+        function saveJob(jobId) {
+            alert('Ish saqlandi!');
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in animation delays
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.1) + 's';
+            });
+
+            // Initialize progress bars
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            }, 1000);
+
+            // Mobile menu setup
+            if (window.innerWidth <= 1024) {
+                document.querySelector('.mobile-menu-btn').style.display = 'block';
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 1024) {
+                document.getElementById('sidebar').classList.remove('show');
+                document.querySelector('.mobile-menu-btn').style.display = 'none';
+            } else {
+                document.querySelector('.mobile-menu-btn').style.display = 'block';
+            }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeJobModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeJobModal();
+                document.getElementById('sidebar').classList.remove('show');
+            }
+        });
+
+        console.log('MigrantGo Dashboard loaded successfully');
+    </script>
+</body>
+</html>
