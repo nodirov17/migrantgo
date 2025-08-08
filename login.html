@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MigrantGo - Kirish</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            animation: float 20s infinite linear;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-100px) translateY(-100px); }
+        }
+
+        /* Floating elements */
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: floatUpDown 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            left: 85%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .floating-element:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 80%;
+            animation-delay: 1s;
+        }
+
+        @keyframes floatUpDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Main container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            padding: 3rem 2rem 1rem;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 1.5rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: white;
+            transform: translateX(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* User type selection */
+        .user-type-selector {
+            display: flex;
+            gap: 1rem;
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-type-card {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(246, 247, 251, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .user-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .user-type-card:hover::before {
+            left: 100%;
+        }
+
+        .user-type-card.active {
+            border-color: #2196F3;
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(76, 175, 80, 0.1));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(33, 150, 243, 0.2);
+        }
+
+        .user-type-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .user-type-card.active .user-type-icon {
+            color: #2196F3;
+            transform: scale(1.1);
+        }
+
+        .user-type-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-type-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Login form */
+        .login-form {
+            padding: 0 2rem 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 20px rgba(33, 150, 243, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-group input:focus + .input-icon {
+            color: #2196F3;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin: -0.5rem 0 1.5rem;
+        }
+
+        .forgot-password a {
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #1976D2;
+        }
+
+        /* Login button */
+        .login-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #2196F3, #4CAF50);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .login-button:hover::before {
+            left: 0;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+        }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Register link */
+        .register-link {
+            text-align: center;
+            padding: 1rem 0;
+            background: rgba(246, 247, 251, 0.5);
+            color: #666;
+        }
+
+        .register-link a {
+            color: #2196F3;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .register-link a:hover {
+            color: #1976D2;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success animation */
+        .success-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            z-index: 20;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            80% { transform: translateY(-10px); }
+        }
+
+        /* Error message */
+        .error-message {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #d32f2f;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            .login-container {
+                max-width: 100%;
+            }
+
+            .login-header {
+                padding: 2rem 1.5rem 1rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .user-type-selector {
+                flex-direction: column;
+                padding: 0 1.5rem;
+            }
+
+            .login-form {
+                padding: 0 1.5rem 1.5rem;
+            }
+
+            .user-type-card {
+                padding: 1rem;
+            }
+        }
+
+        /* Enhanced animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating background elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <!-- Login container -->
+    <div class="login-container">
+        <!-- Header -->
+        <div class="login-header">
+            <a href="index.html" class="back-button" title="Bosh sahifaga qaytish">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">MigrantGo</div>
+            <p class="login-subtitle">Xush kelibsiz! Hisobingizga kiring</p>
+        </div>
+
+        <!-- User type selector -->
+        <div class="user-type-selector">
+            <div class="user-type-card active" onclick="selectUserType('migrant')">
+                <div class="user-type-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-type-title">Migrant</div>
+                <div class="user-type-desc">Ish qidiruvchi</div>
+            </div>
+            
+            <div class="user-type-card" onclick="selectUserType('employer')">
+                <div class="user-type-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div class="user-type-title">Ish beruvchi</div>
+                <div class="user-type-desc">Kompaniya</div>
+            </div>
+        </div>
+
+        <!-- Login form -->
+        <form class="login-form" onsubmit="handleLogin(event)">
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <div class="form-group fade-in">
+                <label for="email">Email yoki telefon</label>
+                <div class="input-wrapper">
+                    <input type="text" id="email" name="email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+            </div>
+
+            <div class="form-group fade-in">
+                <label for="password">Parol</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" name="password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+            </div>
+
+            <div class="forgot-password fade-in">
+                <a href="forgot-password.html">Parolni unutdingizmi?</a>
+            </div>
+
+            <button type="submit" class="login-button fade-in" id="loginBtn">
+                <span id="loginBtnText">Kirish</span>
+            </button>
+        </form>
+
+        <!-- Register link -->
+        <div class="register-link fade-in">
+            Hisobingiz yo'qmi? <a href="register.html">Ro'yxatdan o'ting</a>
+        </div>
+
+        <!-- Success animation -->
+        <div class="success-animation" id="successAnimation">
+            <div style="text-align: center;">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>Muvaffaqiyatli kirildi!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedUserType = 'migrant'; // Default selection
+
+        // User type selection
+        function selectUserType(type) {
+            selectedUserType = type;
+            
+            // Update UI
+            document.querySelectorAll('.user-type-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            event.target.closest('.user-type-card').classList.add('active');
+            
+            // Update form placeholders based on user type
+            const emailInput = document.getElementById('email');
+            const emailIcon = document.querySelector('.input-icon');
+            
+            if (type === 'migrant') {
+                emailInput.placeholder = 'email@example.com yoki +998901234567';
+                emailIcon.className = 'fas fa-envelope input-icon';
+            } else {
+                emailInput.placeholder = 'company@example.com';
+                emailIcon.className = 'fas fa-building input-icon';
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            errorText.textContent = message;
+            errorDiv.style.display = 'flex';
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Handle login form submission
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const loginBtnText = document.getElementById('loginBtnText');
+            
+            // Validation
+            if (!email.trim()) {
+                showError('Email yoki telefon raqamini kiriting');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showError('Parol kamida 6 ta belgidan iborat bo\'lishi kerak');
+                return;
+            }
+            
+            // Show loading state
+            loginBtn.disabled = true;
+            loginBtnText.innerHTML = '<span class="loading"></span> Kirish...';
+            
+            // Hide error if visible
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Simulate login process
+            setTimeout(() => {
+                // Check for demo credentials
+                const isValidLogin = validateCredentials(email, password, selectedUserType);
+                
+                if (isValidLogin) {
+                    // Show success animation
+                    document.getElementById('successAnimation').style.display = 'flex';
+                    
+                    // Redirect after success animation
+                    setTimeout(() => {
+                        if (selectedUserType === 'migrant') {
+                            window.location.href = 'migrant-dashboard.html';
+                        } else {
+                            window.location.href = 'employer-dashboard.html';
+                        }
+                    }, 2000);
+                } else {
+                    // Show error
+                    showError('Email/telefon yoki parol noto\'g\'ri');
+                    loginBtn.disabled = false;
+                    loginBtnText.textContent = 'Kirish';
+                }
+            }, 1500);
+        }
+
+        // Demo credential validation
+        function validateCredentials(email, password, userType) {
+            const demoCredentials = {
+                migrant: [
+                    { email: 'migrant@test.uz', password: '123456' },
+                    { email: 'worker@test.uz', password: '123456' },
+                    { email: '+998901234567', password: '123456' }
+                ],
+                employer: [
+                    { email: 'company@test.uz', password: '123456' },
+                    { email: 'employer@test.uz', password: '123456' },
+                    { email: 'hr@company.uz', password: '123456' }
+                ]
+            };
+            
+            const credentials = demoCredentials[userType];
+            return credentials.some(cred => 
+                (cred.email === email.toLowerCase()) && (cred.password === password)
+            );
+        }
+
+        // Input focus effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+
+        // Email input dynamic validation
+        document.getElementById('email').addEventListener('input', function() {
+            const value = this.value;
+            const icon = this.nextElementSibling;
+            
+            if (value.includes('@')) {
+                icon.className = 'fas fa-envelope input-icon';
+            } else if (value.startsWith('+') || /^\d+$/.test(value)) {
+                icon.className = 'fas fa-phone input-icon';
+            } else {
+                icon.className = selectedUserType === 'migrant' ? 
+                    'fas fa-envelope input-icon' : 'fas fa-building input-icon';
+            }
+        });
+
+        // Password visibility toggle (optional enhancement)
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const icon = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'fas fa-eye-slash input-icon';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'fas fa-lock input-icon';
+            }
+        }
+
+        // Add click event to password icon for visibility toggle
+        document.querySelector('#password + .input-icon').addEventListener('click', togglePasswordVisibility);
+        document.querySelector('#password + .input-icon').style.cursor = 'pointer';
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add stagger animation to form elements
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.1) + 's';
+            });
+
+            // Focus first input
+            document.getElementById('email').focus();
+        });
+
+        // Demo info display
+        console.log('Demo Credentials:');
+        console.log('Migrant: migrant@test.uz / 123456');
+        console.log('Employer: company@test.uz / 123456');
+    </script>
+</body>
+</html>
