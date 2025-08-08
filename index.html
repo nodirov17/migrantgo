@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MigrantGo - Migrantlar uchun qonuniy ish topuvchi platforma</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #2196F3;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #2196F3;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(-100px) translateY(-100px); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #333;
+            transform: translateY(-3px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Countries Section */
+        .countries {
+            padding: 5rem 5%;
+            background: white;
+        }
+
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .country-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .country-card:hover {
+            border-color: #2196F3;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(33, 150, 243, 0.2);
+        }
+
+        .country-flag {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .country-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .job-count {
+            background: #2196F3;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Services Section */
+        .services {
+            padding: 5rem 5%;
+            background: #f8f9fa;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #4CAF50, #2196F3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 5rem 5%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            padding: 3rem 5% 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #4CAF50;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: #4CAF50;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: #999;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .nav {
+                padding: 1rem 3%;
+            }
+        }
+
+        /* Animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">MigrantGo</div>
+            <ul class="nav-links">
+                <li><a href="#home">Bosh sahifa</a></li>
+                <li><a href="#features">Imkoniyatlar</a></li>
+                <li><a href="#countries">Davlatlar</a></li>
+                <li><a href="#services">Xizmatlar</a></li>
+                <li><a href="#contact">Aloqa</a></li>
+            </ul>
+            <button class="mobile-menu" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Qonuniy ish topish endi oson!</h1>
+            <p>Chet elda xavfsiz va ishonchli ish o'rinlarini toping. Huquqiy himoya va professional yordam bilan.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary" onclick="openModal('register')">
+                    <i class="fas fa-user-plus"></i>
+                    Ro'yxatdan o'tish
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i>
+                    Batafsil ma'lumot
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Bizning imkoniyatlarimiz</h2>
+            <p class="section-subtitle animate-on-scroll">MigrantGo platformasi migrantlarga qonuniy va xavfsiz ish topishda yordam beradi</p>
+            
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Qonuniy himoya</h3>
+                    <p>Barcha ish beruvchilar tekshirilgan va davlat tomonidan tasdiqlangan. Sizning huquqlaringiz kafolatlanadi.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Ishonchli ish beruvchilar</h3>
+                    <p>Faqat litsenziyaga ega va tekshirilgan kompaniyalar bilan hamkorlik qilamiz.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-gavel"></i>
+                    </div>
+                    <h3>Huquqiy maslahat</h3>
+                    <p>Professional huquqshunoslardan bepul maslahat olish imkoniyati.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3>Shartnoma tayyorlash</h3>
+                    <p>Mehnat shartnomasini to'g'ri tuzish va imzolashda yordam.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>24/7 qo'llab-quvvatlash</h3>
+                    <p>Har qanday vaqtda yordam va maslahat olish imkoniyati.</p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Xalqaro standartlar</h3>
+                    <p>ILO va xalqaro mehnat qonunlariga muvofiq xizmat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3 id="stat-users">15,000+</h3>
+                    <p>Mamnun foydalanuvchilar</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-jobs">5,000+</h3>
+                    <p>Qonuniy ish o'rinlari</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-countries">12</h3>
+                    <p>Davlatlar</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="stat-success">98%</h3>
+                    <p>Muvaffaqiyat darajasi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countries Section -->
+    <section id="countries" class="countries">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Qaysi davlatlarda ishlash mumkin?</h2>
+            <p class="section-subtitle animate-on-scroll">Eng ko'p talab qilinadigan davlatlar va ish o'rinlari</p>
+            
+            <div class="countries-grid">
+                <div class="country-card animate-on-scroll" onclick="showCountryJobs('russia')">
+                    <div class="country-flag">🇷🇺</div>
+                    <h3>Rossiya</h3>
+                    <div class="job-count">1,250+ ish o'rni</div>
+                </div>
+
+                <div class="country-card animate-on-scroll" onclick="showCountryJobs('korea')">
+                    <div class="country-flag">🇰🇷</div>
+                    <h3>Janubiy Koreya</h3>
+                    <div class="job-count">890+ ish o'rni</div>
+                </div>
+
+                <div class="country-card animate-on-scroll" onclick="showCountryJobs('kazakhstan')">
+                    <div class="country-flag">🇰🇿</div>
+                    <h3>Qozog'iston</h3>
+                    <div class="job-count">650+ ish o'rni</div>
+                </div>
+
+                <div class="country-card animate-on-scroll" onclick="showCountryJobs('turkey')">
+                    <div class="country-flag">🇹🇷</div>
+                    <h3>Turkiya</h3>
+                    <div class="job-count">480+ ish o'rni</div>
+                </div>
+
+                <div class="country-card animate-on-scroll" onclick="showCountryJobs('poland')">
+                    <div class="country-flag">🇵🇱</div>
+                    <h3>Polsha</h3>
+                    <div class="job-count">320+ ish o'rni</div>
+                </div>
+
+                <div class="country-card animate-on-scroll" onclick="showCountryJobs('germany')">
+                    <div class="country-flag">🇩🇪</div>
+                    <h3>Germaniya</h3>
+                    <div class="job-count">180+ ish o'rni</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Bizning xizmatlarimiz</h2>
+            <p class="section-subtitle animate-on-scroll">Sizga kerakli barcha xizmatlar bir joyda</p>
+            
+            <div class="services-grid">
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Ish qidirish</h3>
+                    <p>Malaka va xohishlaringizga mos ish o'rinlarini toping. Professional tavsiyalar bilan.</p>
+                </div>
+
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h3>Hujjat tayyorlash</h3>
+                    <p>Viza, mehnat ruxsatnomasi va boshqa hujjatlarni rasmiylashtirish.</p>
+                </div>
+
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Til kurslari</h3>
+                    <p>Ish davlati tilini o'rganish uchun onlayn va oflayn kurslar.</p>
+                </div>
+
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Turar joy</h3>
+                    <p>Xavfsiz va qulay turar joy topishda yordam.</p>
+                </div>
+
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-medkit"></i>
+                    </div>
+                    <h3>Tibbiy yordam</h3>
+                    <p>Sog'liqni saqlash va tibbiy sug'urta masalalari bo'yicha yordam.</p>
+                </div>
+
+                <div class="service-card animate-on-scroll">
+                    <div class="service-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>Favqulodda yordam</h3>
+                    <p>Muammoli vaziyatlarda tezkor yordam va qo'llab-quvvatlash.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Biz bilan bog'laning</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Aloqa ma'lumotlari</h3>
+                    <div style="margin: 2rem 0;">
+                        <div style="margin-bottom: 1rem;">
+                            <i class="fas fa-phone" style="margin-right: 0.5rem;"></i>
+                            +998 90 123 45 67
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>
+                            info@migrantgo.uz
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <i class="fas fa-map-marker-alt" style="margin-right: 0.5rem;"></i>
+                            Toshkent, O'zbekiston
+                        </div>
+                        <div>
+                            <i class="fas fa-clock" style="margin-right: 0.5rem;"></i>
+                            24/7 qo'llab-quvvatlash
+                        </div>
+                    </div>
+                </div>
+
+                <form class="contact-form" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label for="name">Ismingiz</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefon raqam</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Qaysi davlatda ishlashni xohlaysiz?</label>
+                        <select id="country" name="country" required>
+                            <option value="">Davlatni tanlang</option>
+                            <option value="russia">Rossiya</option>
+                            <option value="korea">Janubiy Koreya</option>
+                            <option value="kazakhstan">Qozog'iston</option>
+                            <option value="turkey">Turkiya</option>
+                            <option value="poland">Polsha</option>
+                            <option value="germany">Germaniya</option>
+                            <option value="other">Boshqa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Qo'shimcha ma'lumot</label>
+                        <textarea id="message" name="message" placeholder="Qanday ish qidiryapsiz? Qanday malakangiz bor?"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i>
+                        Murojaat yuborish
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MigrantGo</h3>
+                    <p>Migrantlar uchun qonuniy ish topuvchi va huquqiy himoya platformasi. Bizning maqsadimiz - sizning xavfsizligingiz va muvaffaqiyatingiz.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Xizmatlar</h3>
+                    <ul>
+                        <li><a href="#">Ish qidirish</a></li>
+                        <li><a href="#">Hujjat tayyorlash</a></li>
+                        <li><a href="#">Huquqiy maslahat</a></li>
+                        <li><a href="#">Til kurslari</a></li>
+                        <li><a href="#">Turar joy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Davlatlar</h3>
+                    <ul>
+                        <li><a href="#">Rossiya</a></li>
+                        <li><a href="#">Janubiy Koreya</a></li>
+                        <li><a href="#">Qozog'iston</a></li>
+                        <li><a href="#">Turkiya</a></li>
+                        <li><a href="#">Polsha</a></li>
+                        <li><a href="#">Germaniya</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Yordam</h3>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Qo'llab-quvvatlash</a></li>
+                        <li><a href="#">Maxfiylik siyosati</a></li>
+                        <li><a href="#">Foydalanish shartlari</a></li>
+                        <li><a href="#">Biz haqimizda</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 MigrantGo. Barcha huquqlar himoyalangan. | Qonuniy migrant mehnat platformasi</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('register')">&times;</span>
+            <h2>Ro'yxatdan o'tish</h2>
+            <form onsubmit="registerUser(event)">
+                <div class="form-group">
+                    <label for="reg-name">To'liq ismingiz</label>
+                    <input type="text" id="reg-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-phone">Telefon raqam</label>
+                    <input type="tel" id="reg-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-age">Yoshingiz</label>
+                    <input type="number" id="reg-age" min="18" max="65" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-education">Ta'lim darajasi</label>
+                    <select id="reg-education" required>
+                        <option value="">Tanlang</option>
+                        <option value="middle">O'rta ta'lim</option>
+                        <option value="secondary">O'rta maxsus ta'lim</option>
+                        <option value="higher">Oliy ta'lim</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reg-experience">Ish tajribasi</label>
+                    <select id="reg-experience" required>
+                        <option value="">Tanlang</option>
+                        <option value="0">Tajriba yo'q</option>
+                        <option value="1-3">1-3 yil</option>
+                        <option value="3-5">3-5 yil</option>
+                        <option value="5+">5+ yil</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Ro'yxatdan o'tish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="jobModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('job')">&times;</span>
+            <div id="jobModalContent">
+                <!-- Ish ma'lumotlari bu yerda ko'rsatiladi -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('[id^="stat-"]');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.replace(/\D/g, ''));
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        if (counter.id === 'stat-success') {
+                            counter.textContent = Math.ceil(current) + '%';
+                        } else if (counter.id === 'stat-countries') {
+                            counter.textContent = Math.ceil(current);
+                        } else {
+                            counter.textContent = Math.ceil(current).toLocaleString() + '+';
+                        }
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        if (counter.id === 'stat-success') {
+                            counter.textContent = target + '%';
+                        } else if (counter.id === 'stat-countries') {
+                            counter.textContent = target;
+                        } else {
+                            counter.textContent = target.toLocaleString() + '+';
+                        }
+                    }
+                };
+                updateCounter();
+            });
+        }
+
+        // Stats section observer
+        const statsObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Modal functions
+        function openModal(type) {
+            const modal = document.getElementById(type + 'Modal');
+            if (modal) {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(type) {
+            const modal = document.getElementById(type + 'Modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Form submissions
+        function submitForm(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span class="loading"></span> Yuborilmoqda...';
+            button.disabled = true;
+            
+            // Simulate form submission
+            setTimeout(() => {
+                alert('Murojaatingiz muvaffaqiyatli yuborildi! Tez orada siz bilan bog\'lanamiz.');
+                button.innerHTML = originalText;
+                button.disabled = false;
+                event.target.reset();
+            }, 2000);
+        }
+
+        function registerUser(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<span class="loading"></span> Ro\'yxatdan o\'tkazilmoqda...';
+            button.disabled = true;
+            
+            // Simulate registration
+            setTimeout(() => {
+                alert('Ro\'yxatdan o\'tish muvaffaqiyatli yakunlandi! Email manzilingizga tasdiqlash xabari yuborildi.');
+                button.innerHTML = originalText;
+                button.disabled = false;
+                closeModal('register');
+                event.target.reset();
+            }, 2000);
+        }
+
+        // Country jobs display
+        function showCountryJobs(country) {
+            const jobData = {
+                russia: {
+                    name: 'Rossiya',
+                    flag: '🇷🇺',
+                    jobs: [
+                        { title: 'Qurilish ishchisi', salary: '80,000-120,000 rubl', company: 'StroyMaster LLC' },
+                        { title: 'Oshpaz', salary: '60,000-90,000 rubl', company: 'Restaurant Group' },
+                        { title: 'Haydovchi', salary: '70,000-100,000 rubl', company: 'Logistics Pro' },
+                        { title: 'Omborchi', salary: '50,000-80,000 rubl', company: 'Warehouse Solutions' }
+                    ]
+                },
+                korea: {
+                    name: 'Janubiy Koreya',
+                    flag: '🇰🇷',
+                    jobs: [
+                        { title: 'Zavod ishchisi', salary: '1,800,000-2,200,000 von', company: 'Samsung Electronics' },
+                        { title: 'Fermachi', salary: '1,600,000-2,000,000 von', company: 'Agricultural Corp' },
+                        { title: 'Baliq ovchisi', salary: '2,000,000-2,800,000 von', company: 'Marine Fishing' },
+                        { title: 'Qurilish ishchisi', salary: '1,900,000-2,300,000 von', company: 'Construction Plus' }
+                    ]
+                },
+                kazakhstan: {
+                    name: 'Qozog\'iston',
+                    flag: '🇰🇿',
+                    jobs: [
+                        { title: 'Neft-gaz ishchisi', salary: '200,000-350,000 tenge', company: 'KazMunayGas' },
+                        { title: 'Haydovchi', salary: '150,000-250,000 tenge', company: 'Transport KZ' },
+                        { title: 'Qurilish ishchisi', salary: '180,000-280,000 tenge', company: 'Build Kazakhstan' },
+                        { title: 'Omborchi', salary: '120,000-200,000 tenge', company: 'Logistics KZ' }
+                    ]
+                }
+            };
+
+            const data = jobData[country];
+            if (!data) return;
+
+            const content = `
+                <h2>${data.flag} ${data.name}da ish o'rinlari</h2>
+                <div style="margin-top: 2rem;">
+                    ${data.jobs.map(job => `
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid #2196F3;">
+                            <h3 style="color: #333; margin-bottom: 0.5rem;">${job.title}</h3>
+                            <p style="color: #666; margin-bottom: 0.5rem;"><i class="fas fa-money-bill-wave"></i> Oylik maosh: ${job.salary}</p>
+                            <p style="color: #666; margin-bottom: 1rem;"><i class="fas fa-building"></i> Kompaniya: ${job.company}</p>
+                            <button class="btn btn-primary" onclick="applyForJob('${job.title}', '${data.name}')">
+                                <i class="fas fa-paper-plane"></i> Ariza berish
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('jobModalContent').innerHTML = content;
+            openModal('job');
+        }
+
+        function applyForJob(jobTitle, country) {
+            alert(`"${jobTitle}" lavozimi uchun ${country}da ariza berishni xohlaysiz. Ro'yxatdan o'ting va to'liq ma'lumot bering.`);
+            closeModal('job');
+            openModal('register');
+        }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Typing effect for hero title
+        function typeWriter(element, text, speed = 100) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect on load
+        window.addEventListener('load', function() {
+            const heroTitle = document.querySelector('.hero h1');
+            if (heroTitle) {
+                const originalText = heroTitle.textContent;
+                typeWriter(heroTitle, originalText, 80);
+            }
+        });
+
+        // Add loading states to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
+                    return; // Skip for navigation links
+                }
+                
+                const ripple = document.createElement('span');
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.6);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    pointer-events: none;
+                `;
+                
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize all animations and effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add entrance animations with delays
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.1) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
+                        
